@@ -1,0 +1,42 @@
+{
+  "name": "photography",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "pre-commit": "lint",
+  "scripts": {
+    "start": "node app/index.js",
+    "dev": "nodemon app/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "cross-env": "^7.0.2",
+    "dotenv-expand": "^5.1.0",
+    "eslint": "^7.12.1",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-config-standard": "^13.0.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^9.1.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "nodemon": "^1.19.1",
+    "pre-commit": "^1.2.2",
+    "prettier": "^1.18.2"
+  },
+  "dependencies": {
+    "@koa/cors": "^3.1.0",
+    "ali-oss": "^6.11.2",
+    "dotenv": "^8.2.0",
+    "koa": "^2.13.0",
+    "koa-body": "^4.2.0",
+    "koa-json-error": "^3.1.2",
+    "koa-parameter": "^3.0.1",
+    "koa-router": "^9.4.0",
+    "koa-session": "^6.1.0",
+    "mysql2": "^2.2.5",
+    "sequelize": "^6.3.5"
+  }
+}
