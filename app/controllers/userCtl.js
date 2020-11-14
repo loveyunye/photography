@@ -1,5 +1,7 @@
 const User = require('../models/User');
 const { Op } = require('sequelize');
+const Token = require('../store/token');
+const { uuid } = require('../utils');
 
 class UserCtl {
   async list(ctx) {
@@ -76,7 +78,14 @@ class UserCtl {
       authStr = '账号密码错误';
     }
     if (!user) ctx.throw(401, authStr);
+    await Token.set(uuid(), user, openId ? false : 1200);
     ctx.body = user;
+  }
+
+  // 登出
+  async logout(ctx) {
+    const id = ctx.headers.authorization;
+    await Token.destroy(id);
   }
 }
 

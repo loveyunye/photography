@@ -7,15 +7,11 @@ class RedisTokenStore {
   }
 
   static getRedisTokenId(id) {
-    return `token:${id}`;
+    return `auth:${id}`;
   }
 
-  static getRedisSessionId(sid) {
-    return `sid:${sid}`;
-  }
-
-  async get(id, login = true) {
-    const token = login ? RedisTokenStore.getRedisTokenId(id) : RedisTokenStore.getRedisSessionId(id);
+  async get(id) {
+    const token = RedisTokenStore.getRedisSessionId(id);
     const data = await this.client.get(token);
     if (!data) {
       return null;
@@ -27,7 +23,11 @@ class RedisTokenStore {
   async set(id, user, ttl = 1200) {
     const token = RedisTokenStore.getRedisTokenId(id);
     const userStr = JSON.stringify(user);
-    await this.client.setex(token, ttl, userStr);
+    if (ttl) {
+      await this.client.setex(token, ttl, userStr);
+    } else {
+      await this.client.set(token, userStr);
+    }
   }
 
   async destroy(id) {
