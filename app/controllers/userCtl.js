@@ -13,7 +13,7 @@ class UserCtl {
         [Op.or]: [
           {
             name: {
-              [Op.like]: `%${name}%`
+              [Op.like]: `%${name}%`,
             },
           },
         ],
