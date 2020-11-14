@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "pre-commit": "lint",
+  "pre-commit": ["lint"],
   "scripts": {
     "start": "node app/index.js",
-    "dev": "nodemon app/index.js"
+    "dev": "nodemon app/index.js",
+    "lint": "eslint --fix ."
   },
   "keywords": [],
   "author": "",
