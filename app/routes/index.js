@@ -1,13 +1,22 @@
-const fs = require('fs');
-// const indexRoute = require('./indexRoute');
-module.exports = function(app) {
-  fs.readdirSync(__dirname).forEach((file) => {
-    if (file === 'index.js' || file === 'indexRoute.js') {
-      return;
-    }
-    const router = require(`./${file}`);
-    app.use(router.routes()).use(router.allowedMethods());
-  });
-  // 后加载公共Route
-  // app.use(indexRoute.routes()).use(indexRoute.allowedMethods());
-};
+const path = require('path');
+const Router = require('koa-router');
+const OssClient = require('../store/oss');
+const router = new Router();
+const UserCtl = require('../controllers/userCtl');
+
+router.post('/upload', async (ctx) => {
+  const filePath = ctx.request.files.image.path;
+  const fileName = path.basename(filePath);
+  try {
+    const res = await OssClient.put(fileName, ctx.request.files.image.path);
+    ctx.body = {
+      url: res.url,
+    };
+  } catch (err) {
+    ctx.throw(405, err.message);
+  }
+});
+
+router.post('/login', UserCtl.login);
+
+module.exports = router;
