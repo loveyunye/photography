@@ -11,7 +11,7 @@ class RedisTokenStore {
   }
 
   async get(id) {
-    const token = RedisTokenStore.getRedisSessionId(id);
+    const token = RedisTokenStore.getRedisTokenId(id);
     const data = await this.client.get(token);
     if (!data) {
       return null;
@@ -20,7 +20,7 @@ class RedisTokenStore {
     return result;
   }
 
-  async set(id, user, ttl = 1200) {
+  async set(id, user, ttl) {
     const token = RedisTokenStore.getRedisTokenId(id);
     const userStr = JSON.stringify(user);
     if (ttl) {

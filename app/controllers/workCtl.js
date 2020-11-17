@@ -3,7 +3,7 @@ const { Op } = require('sequelize');
 
 class WorkCtl {
   async list(ctx) {
-    const { page = 20, size = 0 } = ctx.request.query;
+    const { page = 1, size = 10 } = ctx.request.query;
     if (isNaN(Number(page)) || isNaN(Number(size))) {
       ctx.throw(422, 'page、size必须是整数');
     }

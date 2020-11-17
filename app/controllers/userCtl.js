@@ -78,8 +78,12 @@ class UserCtl {
       authStr = '账号密码错误';
     }
     if (!user) ctx.throw(401, authStr);
-    await Token.set(uuid(), user, openId ? false : 1200);
-    ctx.body = user;
+    const authToken = uuid();
+    await Token.set(authToken, user, openId ? false : 7200);
+    ctx.body = {
+      user,
+      authToken,
+    };
   }
 
   // 登出
