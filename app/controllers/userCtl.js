@@ -79,7 +79,7 @@ class UserCtl {
     }
     if (!user) ctx.throw(401, authStr);
     const authToken = uuid();
-    await Token.set(authToken, user, openId ? false : 7200);
+    await Token.set(authToken, user, openId ? 86400 : 3600);
     ctx.body = {
       user,
       authToken,
