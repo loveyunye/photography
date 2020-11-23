@@ -78,18 +78,20 @@ class UserCtl {
       authStr = '账号密码错误';
     }
     if (!user) ctx.throw(401, authStr);
-    const authToken = uuid();
-    await Token.set(authToken, user, openId ? 86400 : 3600);
+    const authorization = uuid();
+    await Token.set(authorization, user, openId ? 86400 : 3600);
     ctx.body = {
       user,
-      authToken,
+      authorization,
     };
   }
 
   // 登出
   async logout(ctx) {
     const id = ctx.headers.authorization;
-    await Token.destroy(id);
+    if (id) {
+      await Token.destroy(id);
+    }
   }
 }
 

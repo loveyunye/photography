@@ -18,5 +18,6 @@ router.post('/upload', async (ctx) => {
 });
 
 router.post('/login', UserCtl.login);
+router.post('/logout', UserCtl.logout);
 
 module.exports = router;
