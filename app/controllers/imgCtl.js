@@ -7,23 +7,28 @@ class ImgCtl {
     if (isNaN(Number(page)) || isNaN(Number(size))) {
       ctx.throw(422, 'page、size必须是整数');
     }
-    const { workId, name = '' } = ctx.request.query;
-    const imgs = await Img.findAll({
-      where: {
-        ...(workId ? { workId } : {}),
-        [Op.or]: [
-          {
-            name: {
-              [Op.like]: `%${name}%`,
-            },
+    const { workId, key = '' } = ctx.request.query;
+    const where = {
+      ...(workId ? { workId } : {}),
+      [Op.or]: [
+        {
+          name: {
+            [Op.like]: `%${key}%`,
           },
-        ],
-      },
+        },
+      ],
+    };
+    const imgs = await Img.findAll({
+      where,
       limit: +size,
       offset: (page - 1 < 0 ? 0 : page - 1) * size,
       order: [['updatedAt', 'desc']],
     });
-    ctx.body = imgs;
+    const total = await Img.count({ where });
+    ctx.body = {
+      total,
+      records: imgs,
+    };
   }
 
   async create(ctx) {

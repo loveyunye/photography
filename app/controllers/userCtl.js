@@ -9,23 +9,28 @@ class UserCtl {
     if (isNaN(Number(page)) || isNaN(Number(size))) {
       ctx.throw(422, 'page、size必须是整数');
     }
-    const { name = '', type } = ctx.request.query;
-    const users = await User.findAll({
-      where: {
-        [Op.or]: [
-          {
-            name: {
-              [Op.like]: `%${name}%`,
-            },
+    const { key = '', type } = ctx.request.query;
+    const where = {
+      [Op.or]: [
+        {
+          name: {
+            [Op.like]: `%${key}%`,
           },
-        ],
-        type: type || ['mobile-admin', 'mobile'],
-      },
+        },
+      ],
+      type: type || ['mobile-admin', 'normal'],
+    };
+    const users = await User.findAll({
+      where,
       limit: +size,
       offset: (page - 1 < 0 ? 0 : page - 1) * size,
       order: [['updatedAt', 'desc']],
     });
-    ctx.body = users;
+    const total = await User.count({ where });
+    ctx.body = {
+      total,
+      records: users,
+    };
   }
 
   async create(ctx) {
@@ -92,6 +97,7 @@ class UserCtl {
     if (id) {
       await Token.destroy(id);
     }
+    ctx.status = 200;
   }
 }
 

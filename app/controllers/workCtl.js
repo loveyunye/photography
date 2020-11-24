@@ -8,24 +8,31 @@ class WorkCtl {
       ctx.throw(422, 'page、size必须是整数');
     }
     const { key = '' } = ctx.request.query;
-    const works = await Work.findAll({
-      where: {
-        [Op.or]: [
-          {
-            name: {
-              [Op.like]: `%${key}%`,
-            },
-            describe: {
-              [Op.like]: `%${key}%`,
-            },
+    const where = {
+      [Op.or]: [
+        {
+          name: {
+            [Op.like]: `%${key}%`,
           },
-        ],
-      },
+        },
+        {
+          describe: {
+            [Op.like]: `%${key}%`,
+          },
+        },
+      ],
+    };
+    const works = await Work.findAll({
+      where,
       limit: +size,
       offset: (page - 1 < 0 ? 0 : page - 1) * size,
       order: [['updatedAt', 'desc']],
     });
-    ctx.body = works;
+    const total = await Work.count({ where });
+    ctx.body = {
+      total,
+      records: works,
+    };
   }
 
   async create(ctx) {

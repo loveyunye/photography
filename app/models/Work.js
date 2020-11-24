@@ -13,6 +13,10 @@ Work.init(
       type: Sequelize.STRING(128),
       allowNull: false,
     },
+    choose: {
+      type: Sequelize.INTEGER,
+      defaultValue: 20,
+    },
     // 封面
     mask: Sequelize.STRING(256),
     // 描述
