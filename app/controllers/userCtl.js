@@ -99,6 +99,11 @@ class UserCtl {
     }
     ctx.status = 200;
   }
+
+  // 获取个人信息
+  async getMy(ctx) {
+    ctx.status = ctx.state.user;
+  }
 }
 
 module.exports = new UserCtl();
