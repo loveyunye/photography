@@ -29,7 +29,6 @@ User.init(
     openId: {
       type: Sequelize.STRING(256),
       defaultValue: '',
-      unique: true,
     },
     password: Sequelize.STRING(256),
     account: {

@@ -41,9 +41,9 @@ class UserCtl {
         require: false,
       },
     });
-    const img = await User.create(ctx.request.body);
+    const user = await User.create(ctx.request.body);
     ctx.status = 201;
-    ctx.body = img;
+    ctx.body = user;
   }
 
   async edit(ctx) {
