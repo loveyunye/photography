@@ -33,6 +33,11 @@ class UserCtl {
     };
   }
 
+  async all(ctx) {
+    const users = await User.findAll({ where: { type: 'normal' } });
+    ctx.body = users;
+  }
+
   async create(ctx) {
     ctx.status = 201;
     ctx.verifyParams({

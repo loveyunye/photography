@@ -35,6 +35,11 @@ class WorkCtl {
     };
   }
 
+  async all(ctx) {
+    const works = await Work.findAll();
+    ctx.body = works;
+  }
+
   async create(ctx) {
     ctx.status = 201;
     ctx.verifyParams({

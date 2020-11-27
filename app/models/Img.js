@@ -11,6 +11,7 @@ Img.init(
     // 名称
     name: {
       type: Sequelize.STRING(128),
+      defaultValue: '图片',
       // allowNull: false,
     },
     // 地址
