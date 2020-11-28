@@ -42,6 +42,7 @@
     "koa-router": "^9.4.0",
     "koa-session": "^6.1.0",
     "mysql2": "^2.2.5",
-    "sequelize": "^6.3.5"
+    "sequelize": "^6.3.5",
+    "unzipper": "^0.10.11"
   }
 }

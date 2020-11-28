@@ -17,6 +17,18 @@ function uuid() {
   return uuidStr;
 }
 
+function isImage(ext) {
+  const pathStr = ext.split('.');
+  if (pathStr.length > 1) {
+    return (
+      ['png', 'jpg', 'jpeg', 'bmp', 'gif', 'webp', 'psd', 'svg', 'tiff'].indexOf(pathStr[pathStr.length - 1]) !== -1
+    );
+  } else {
+    return false;
+  }
+}
+
 module.exports = {
   uuid,
+  isImage,
 };

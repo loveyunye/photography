@@ -7,5 +7,6 @@ router.get('/', Auth.admin, ImgCtl.list);
 router.post('/', Auth.admin, ImgCtl.create);
 router.patch('/:id', Auth.admin, ImgCtl.edit);
 router.delete('/:id', Auth.admin, ImgCtl.delete);
+router.post('/upload/:workId', ImgCtl.upload);
 
 module.exports = router;
