@@ -26,8 +26,8 @@ function removeDir(dir) {
 // 上传
 async function uploadImages(dir, workId) {
   const files = readdirSync(dir);
-  files.forEach(async (item) => {
-    const newPath = path.join(dir, item);
+  for (var i = 0; i < files.length; i++) {
+    const newPath = path.join(dir, files[i]);
     const stat = statSync(newPath);
     if (stat.isDirectory()) {
       await uploadImages(newPath, workId);
@@ -35,11 +35,11 @@ async function uploadImages(dir, workId) {
       const isPicture = isImage(newPath);
       if (isPicture && newPath.indexOf('__MACOSX') === -1) {
         count = count + 1;
-        const { url } = await OssClient.put(item, newPath);
-        await Img.create({ path: url, workId, name: item });
+        const { url } = await OssClient.put(files[i], newPath);
+        await Img.create({ path: url, workId, name: files[i] });
       }
     }
-  });
+  }
 }
 
 const STATIC_PATH = '/Users/yunye/workspace';

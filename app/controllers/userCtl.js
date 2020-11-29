@@ -1,4 +1,7 @@
 const User = require('../models/User');
+const Work = require('../models/Work');
+const Img = require('../models/Img');
+const WorkUser = require('../models/WorkUser');
 const { Op } = require('sequelize');
 const Token = require('../store/token');
 const { uuid } = require('../utils');
@@ -108,6 +111,29 @@ class UserCtl {
   // 获取个人信息
   async getMy(ctx) {
     ctx.status = ctx.state.user;
+  }
+
+  async getWorks(ctx) {
+    const id = ctx.params.id;
+    const user = await User.findByPk(id);
+    if (!user) ctx.throw(404, '资源未找到');
+    const workUsers = await WorkUser.findAll({ userId: id });
+    const works = [];
+    if (workUsers.length) {
+      const bridge = JSON.parse(JSON.stringify(workUsers));
+      for (let i = 0; i < bridge.length; i++) {
+        const imgs = await Img.findAll({ workId: bridge[i].workId });
+        const workId = await Work.findByPk({ id: bridge[i].workId });
+        works.push({
+          ...workId,
+          imgs: imgs,
+        });
+      }
+    }
+    ctx.body = {
+      works,
+      user,
+    };
   }
 }
 

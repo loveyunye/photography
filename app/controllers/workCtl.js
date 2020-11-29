@@ -1,4 +1,7 @@
 const Work = require('../models/Work');
+const Img = require('../models/Img');
+const User = require('../models/Img');
+const WorkUser = require('../models/WorkUser');
 const { Op } = require('sequelize');
 
 class WorkCtl {
@@ -45,7 +48,6 @@ class WorkCtl {
     ctx.verifyParams({
       name: {
         type: 'string',
-        require: false,
       },
     });
     const work = await Work.create(ctx.request.body);
@@ -67,6 +69,56 @@ class WorkCtl {
     if (!deleted) ctx.throw(404, '资源未找到');
     await deleted.destroy();
     ctx.status = 204;
+  }
+
+  async getDetail(ctx) {
+    const id = ctx.params.id;
+    const work = await Work.findByPk(id);
+    if (!work) ctx.throw(404, '资源未找到');
+    const imgs = await Img.findAll({ where: { workId: id } });
+    const workUsers = await WorkUser.findAll({ where: { workId: id } });
+    const users = [];
+    if (workUsers.length) {
+      const bridge = JSON.parse(JSON.stringify(workUsers));
+      for (let i = 0; i < bridge.length; i++) {
+        const user = await User.findOne({ where: { userId: bridge[i].userId }, raw: true });
+        users.push({
+          ...user,
+          ...bridge,
+        });
+      }
+    }
+    ctx.body = {
+      work,
+      imgs,
+      users,
+    };
+  }
+
+  async setLink(ctx) {
+    const workId = ctx.params.id;
+    const work = await Work.findByPk(workId);
+    if (!work) ctx.throw(404, '资源未找到');
+    ctx.verifyParams({
+      userId: {
+        type: 'int',
+      },
+      link: {
+        type: Boolean,
+        require: false,
+      },
+    });
+    const { userId, link = true } = ctx.request.body;
+    const user = await User.findByPk(userId);
+    if (!user) ctx.throw(404, '资源未找到');
+    const bridge = await WorkUser.findOne({ where: { workId, userId } });
+    if (!bridge && link) {
+      await WorkUser.create({ workId, userId });
+    }
+    if (bridge && !link) {
+      await bridge.destroy();
+    }
+    ctx.status = 200;
   }
 }
 

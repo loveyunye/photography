@@ -8,5 +8,7 @@ router.get('/all', Auth.admin, WorkCtl.all);
 router.post('/', Auth.admin, WorkCtl.create);
 router.patch('/:id', Auth.admin, WorkCtl.edit);
 router.delete('/:id', Auth.admin, WorkCtl.delete);
+router.get('/detail/:id', Auth.admin, WorkCtl.getDetail);
+router.post('/link/:id', Auth.admin, WorkCtl.setLink);
 
 module.exports = router;
