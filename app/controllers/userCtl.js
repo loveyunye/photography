@@ -123,10 +123,11 @@ class UserCtl {
       const bridge = JSON.parse(JSON.stringify(workUsers));
       for (let i = 0; i < bridge.length; i++) {
         const imgs = await Img.findAll({ workId: bridge[i].workId });
-        const workId = await Work.findByPk({ id: bridge[i].workId });
+        const work = await Work.findByPk(bridge[i].workId);
         works.push({
-          ...workId,
-          imgs: imgs,
+          select: bridge.imgs,
+          imgs,
+          ...JSON.parse(JSON.stringify(work)),
         });
       }
     }

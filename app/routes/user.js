@@ -8,5 +8,6 @@ router.get('/all', Auth.admin, UserCtl.all);
 router.post('/', UserCtl.create);
 router.patch('/:id', Auth.admin, UserCtl.edit);
 router.delete('/:id', Auth.admin, UserCtl.delete);
+router.get('/detail/:id', Auth.admin, UserCtl.getWorks);
 
 module.exports = router;

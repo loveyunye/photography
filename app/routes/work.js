@@ -10,5 +10,6 @@ router.patch('/:id', Auth.admin, WorkCtl.edit);
 router.delete('/:id', Auth.admin, WorkCtl.delete);
 router.get('/detail/:id', Auth.admin, WorkCtl.getDetail);
 router.post('/link/:id', Auth.admin, WorkCtl.setLink);
+router.post('/setImgs/:id', Auth.admin, WorkCtl.setImgs);
 
 module.exports = router;
