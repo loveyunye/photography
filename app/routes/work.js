@@ -1,15 +1,16 @@
 const Router = require('koa-router');
 const WorkCtl = require('../controllers/workCtl');
 const router = new Router({ prefix: '/works' });
-const Auth = require('../middleWare/auth');
+// const Auth = require('../middleWare/auth');
+// router.use(Auth.admin);
 
-router.get('/', Auth.admin, WorkCtl.list);
-router.get('/all', Auth.admin, WorkCtl.all);
-router.post('/', Auth.admin, WorkCtl.create);
-router.patch('/:id', Auth.admin, WorkCtl.edit);
-router.delete('/:id', Auth.admin, WorkCtl.delete);
-router.get('/detail/:id', Auth.admin, WorkCtl.getDetail);
-router.post('/link/:id', Auth.admin, WorkCtl.setLink);
-router.post('/setImgs/:id', Auth.admin, WorkCtl.setImgs);
+router.get('/', WorkCtl.list);
+router.get('/all', WorkCtl.all);
+router.post('/', WorkCtl.create);
+router.patch('/:id', WorkCtl.edit);
+router.delete('/:id', WorkCtl.delete);
+router.get('/detail/:id', WorkCtl.getDetail);
+router.post('/link/:id', WorkCtl.setLink);
+router.post('/setImgs/:id', WorkCtl.setImgs);
 
 module.exports = router;
