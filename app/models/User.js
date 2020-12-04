@@ -4,7 +4,12 @@ const sequelize = require('../core/mysql');
 /**
  * @class User 用户模型
  */
-class User extends Model {}
+class User extends Model {
+  static async getUser(openId) {
+    const user = await User.findOne({ where: { openId } });
+    return user;
+  }
+}
 
 User.init(
   {
@@ -23,6 +28,16 @@ User.init(
     // 城市
     city: {
       type: Sequelize.STRING(64),
+      defaultValue: '',
+    },
+    // 联系电话
+    phone: {
+      type: Sequelize.STRING(64),
+      defaultValue: '',
+    },
+    // 联系地址
+    address: {
+      type: Sequelize.STRING(128),
       defaultValue: '',
     },
     // 公共Id

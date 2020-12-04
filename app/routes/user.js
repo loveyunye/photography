@@ -10,4 +10,7 @@ router.patch('/:id', Auth.admin, UserCtl.edit);
 router.delete('/:id', Auth.admin, UserCtl.delete);
 router.get('/detail/:id', Auth.admin, UserCtl.getWorks);
 
+router.post('/mobile', UserCtl.editMobile);
+router.get('/mobile', Auth.mobile, UserCtl.getMy);
+
 module.exports = router;
