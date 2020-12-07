@@ -14,6 +14,21 @@ Share.init(
       unique: true,
       primaryKey: true,
     },
+    used: {
+      type: Sequelize.INTEGER,
+      get() {
+        const value = this.getDataValue('used');
+        if (value) {
+          return true;
+        } else {
+          return false;
+        }
+      },
+      set(val) {
+        const value = val ? Number(val) : 0;
+        this.setDataValue('used', value);
+      },
+    },
   },
   {
     sequelize,

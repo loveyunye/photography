@@ -2,9 +2,11 @@ const Work = require('../models/Work');
 const Img = require('../models/Img');
 const User = require('../models/User');
 const WorkUser = require('../models/WorkUser');
+const Share = require('../models/Share');
 const { Op } = require('sequelize');
 
 class WorkCtl {
+  // 列表
   async list(ctx) {
     const { page = 1, size = 10 } = ctx.request.query;
     if (isNaN(Number(page)) || isNaN(Number(size))) {
@@ -38,11 +40,13 @@ class WorkCtl {
     };
   }
 
+  // 获取所有
   async all(ctx) {
     const works = await Work.findAll();
     ctx.body = works;
   }
 
+  // 创建
   async create(ctx) {
     ctx.status = 201;
     ctx.verifyParams({
@@ -55,6 +59,7 @@ class WorkCtl {
     ctx.body = work;
   }
 
+  // 编辑
   async edit(ctx) {
     const id = ctx.params.id;
     const updated = await Work.findByPk(id);
@@ -63,6 +68,7 @@ class WorkCtl {
     ctx.body = updated;
   }
 
+  // 删除
   async delete(ctx) {
     const id = ctx.params.id;
     const deleted = await Work.findByPk(id);
@@ -71,8 +77,7 @@ class WorkCtl {
     ctx.status = 204;
   }
 
-  async getDetail(ctx) {
-    const id = ctx.params.id;
+  static async detailById(ctx, id) {
     const work = await Work.findByPk(id);
     if (!work) ctx.throw(404, '资源未找到');
     const imgs = await Img.findAll({ where: { workId: id } });
@@ -88,13 +93,56 @@ class WorkCtl {
         });
       }
     }
-    ctx.body = {
+    return {
       work,
       imgs,
       users,
     };
   }
 
+  // 获取详情
+  async getDetail(ctx) {
+    const id = ctx.params.id;
+    const detail = await WorkCtl.detailById(ctx, id);
+    ctx.body = detail;
+  }
+
+  // 通过code获取
+  async getDetailByCode(ctx) {
+    const code = ctx.params.code;
+    const share = await Share.findByPk(code);
+    if (!share) ctx.throw(404, '分享码已过期');
+    const detail = await WorkCtl.detailById(ctx, share.workId);
+    ctx.body = {
+      ...detail,
+      share,
+    };
+  }
+
+  // 获取作品详情
+  async getWorks(ctx) {
+    const { id } = ctx.state.user;
+    const workUsers = await WorkUser.findAll({ where: { userId: id } });
+    const works = [];
+    if (workUsers.length) {
+      const bridge = JSON.parse(JSON.stringify(workUsers));
+      for (let i = 0; i < bridge.length; i++) {
+        const work = await Work.findByPk(bridge[i].workId);
+        works.push(JSON.parse(JSON.stringify(work)));
+      }
+    }
+    ctx.body = works;
+  }
+
+  // 判断是否为自己的作品
+  async self(ctx) {
+    const { id: userId } = ctx.state.user;
+    const workId = ctx.params.id;
+    const workUser = await WorkUser.findOne({ where: { userId, workId } });
+    ctx.body = workUser;
+  }
+
+  // 设置关联
   async setLink(ctx) {
     const workId = ctx.params.id;
     const work = await Work.findByPk(workId);
@@ -121,6 +169,7 @@ class WorkCtl {
     ctx.status = 200;
   }
 
+  // 设置图片
   async setImgs(ctx) {
     const workId = ctx.params.id;
     const work = await Work.findByPk(workId);
@@ -140,6 +189,19 @@ class WorkCtl {
     const bridge = await WorkUser.findOne({ where: { workId, userId } });
     if (!bridge) {
       await WorkUser.create({ workId, userId, imgs });
+    } else {
+      await bridge.update({ imgs });
+    }
+    ctx.status = 200;
+  }
+
+  async selectImgs(ctx) {
+    const { id: userId } = ctx.state.user;
+    const workId = ctx.params.id;
+    const { imgs = [] } = ctx.request.body;
+    const bridge = await WorkUser.findOne({ where: { workId, userId } });
+    if (!bridge) {
+      ctx.throw(404, '资源未找到');
     } else {
       await bridge.update({ imgs });
     }

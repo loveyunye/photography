@@ -5,7 +5,6 @@ const WorkUser = require('../models/WorkUser');
 const { Op } = require('sequelize');
 const Token = require('../store/token');
 const { uuid } = require('../utils');
-
 class UserCtl {
   async list(ctx) {
     const { page = 1, size = 10 } = ctx.request.query;
@@ -51,6 +50,17 @@ class UserCtl {
     });
     const user = await User.create(ctx.request.body);
     ctx.status = 201;
+    ctx.body = user;
+  }
+
+  async mobile(ctx) {
+    const { openId } = ctx.request.body;
+    let user = await User.findOne({ where: { openId } });
+    if (user) {
+      user = await user.update(ctx.request.body);
+    } else {
+      user = await User.create(ctx.request.body);
+    }
     ctx.body = user;
   }
 
@@ -110,7 +120,7 @@ class UserCtl {
 
   // 获取个人信息
   async getMy(ctx) {
-    ctx.status = ctx.state.user;
+    ctx.body = ctx.state.user;
   }
 
   async getWorks(ctx) {

@@ -13,7 +13,6 @@ router.delete('/:id', Auth.admin, UserCtl.delete);
 router.get('/detail/:id', Auth.admin, UserCtl.getWorks);
 
 router.get('/mobile', Auth.mobile, UserCtl.getMy);
-router.post('/mobile', Auth.mobile, UserCtl.create);
-router.post('/mobile/:id', UserCtl.edit);
+router.post('/mobile', UserCtl.mobile);
 
 module.exports = router;
