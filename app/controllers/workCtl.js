@@ -87,10 +87,12 @@ class WorkCtl {
       const bridge = JSON.parse(JSON.stringify(workUsers));
       for (let i = 0; i < bridge.length; i++) {
         const user = await User.findOne({ where: { id: bridge[i].userId }, raw: true });
-        users.push({
-          ...bridge[i],
-          ...user,
-        });
+        if (user) {
+          users.push({
+            ...bridge[i],
+            ...user,
+          });
+        }
       }
     }
     return {

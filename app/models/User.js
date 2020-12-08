@@ -35,6 +35,10 @@ User.init(
       type: Sequelize.STRING(64),
       defaultValue: '',
     },
+    email: {
+      type: Sequelize.STRING(128),
+      defaultValue: '',
+    },
     // 联系地址
     address: {
       type: Sequelize.STRING(128),

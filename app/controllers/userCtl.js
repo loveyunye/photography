@@ -53,6 +53,28 @@ class UserCtl {
     ctx.body = user;
   }
 
+  // 修改密码
+  async updatePass(ctx) {
+    const { account } = ctx.state.user;
+    ctx.verifyParams({
+      past: {
+        type: 'string',
+      },
+      now: {
+        type: 'string',
+      },
+      repeat: {
+        type: 'string',
+      },
+    });
+    const { past: password, now, repeat } = ctx.request.body;
+    const user = await User.findOne({ where: { password, account } });
+    if (!user) ctx.throw(404, '旧密码未找到');
+    if (now !== repeat) ctx.throw(400, '密码不一致');
+    await user.update({ password: now });
+    ctx.status = 200;
+  }
+
   async mobile(ctx) {
     const { openId } = ctx.request.body;
     let user = await User.findOne({ where: { openId } });

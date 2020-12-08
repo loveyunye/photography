@@ -11,6 +11,7 @@ router.patch('/:id', Auth.admin, UserCtl.edit);
 
 router.delete('/:id', Auth.admin, UserCtl.delete);
 router.get('/detail/:id', Auth.admin, UserCtl.getWorks);
+router.post('/updatePass', Auth.admin, UserCtl.updatePass);
 
 router.get('/mobile', Auth.mobile, UserCtl.getMy);
 router.post('/mobile', UserCtl.mobile);

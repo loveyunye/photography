@@ -23,7 +23,6 @@ router.get('/getCode', async (ctx) => {
   const APPSECRET = process.env.APPSECRET;
   const { code } = ctx.request.query;
   const url = `https://api.weixin.qq.com/sns/jscode2session?appid=${appid}&secret=${APPSECRET}&js_code=${code}&grant_type=authorization_code`;
-  console.log(url);
   try {
     const { data } = await axios.get(url);
     ctx.body = data;
