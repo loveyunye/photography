@@ -9,6 +9,8 @@ router.get('/all', Auth.admin, UserCtl.all);
 router.post('/', Auth.admin, UserCtl.create);
 router.patch('/:id', Auth.admin, UserCtl.edit);
 
+router.get('/forbid/:id', Auth.admin, UserCtl.forbid);
+
 router.delete('/:id', Auth.admin, UserCtl.delete);
 router.get('/detail/:id', Auth.admin, UserCtl.getWorks);
 router.post('/updatePass', Auth.admin, UserCtl.updatePass);

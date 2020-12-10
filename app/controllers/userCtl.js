@@ -35,6 +35,16 @@ class UserCtl {
     };
   }
 
+  // 禁止
+  async forbid(ctx) {
+    const id = ctx.params.id;
+    const updated = await User.findByPk(id);
+    if (!updated) ctx.throw(404, '资源未找到');
+    const { forbid = 0 } = ctx.request.body;
+    await updated.update({ forbid });
+    ctx.body = updated;
+  }
+
   async all(ctx) {
     const users = await User.findAll({ where: { type: 'normal' } });
     ctx.body = users;

@@ -28,6 +28,22 @@ UserWork.init(
         this.setDataValue('imgs', value);
       },
     },
+    submit: {
+      defaultValue: 0,
+      type: Sequelize.INTEGER,
+      get() {
+        const value = this.getDataValue('submit');
+        if (value) {
+          return true;
+        } else {
+          return false;
+        }
+      },
+      set(val) {
+        const value = val ? Number(val) : 0;
+        this.setDataValue('submit', value);
+      },
+    },
   },
   {
     sequelize,

@@ -54,6 +54,22 @@ User.init(
       type: Sequelize.STRING(32),
       unique: true,
     },
+    forbid: {
+      defaultValue: 0,
+      type: Sequelize.INTEGER,
+      get() {
+        const value = this.getDataValue('forbid');
+        if (value) {
+          return true;
+        } else {
+          return false;
+        }
+      },
+      set(val) {
+        const value = val ? Number(val) : 0;
+        this.setDataValue('forbid', value);
+      },
+    },
     // 用户类型
     type: {
       type: Sequelize.ENUM(['admin', 'normal', 'mobile-admin']),

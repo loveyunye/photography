@@ -200,12 +200,12 @@ class WorkCtl {
   async selectImgs(ctx) {
     const { id: userId } = ctx.state.user;
     const workId = ctx.params.id;
-    const { imgs = [] } = ctx.request.body;
+    const { imgs = [], submit = false } = ctx.request.body;
     const bridge = await WorkUser.findOne({ where: { workId, userId } });
     if (!bridge) {
       ctx.throw(404, '资源未找到');
     } else {
-      await bridge.update({ imgs });
+      await bridge.update({ imgs, submit });
     }
     ctx.status = 200;
   }
