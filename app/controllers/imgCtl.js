@@ -34,7 +34,6 @@ class ImgCtl {
   }
 
   async create(ctx) {
-    ctx.status = 201;
     ctx.verifyParams({
       name: {
         type: 'string',
